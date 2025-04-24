@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SIG INTERNET-GEOMATIKA UPNYK</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"integrity="sha256-sA+zNCD39Kp8Gz8epRJ6ElhI9l+N1F9Pq+fRCMC4ZmI="crossorigin=""/>
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
+
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container justify-content-center">
+      <a class="navbar-brand navbar-brand-centered" href="#">Teknik Geomatika UPN "Veteran" Yogyakarta</a>
+    </div>
+    <div class="top-right-nav">
+      <div class="nav-box" onclick="tampilkanKonten('contact')">Contact</div>
+      <div class="nav-box" onclick="tampilkanKonten('email')">Email</div>
+      <div class="nav-box" onclick="tampilkanKonten('sosmed')">Media Sosial</div>
+    </div>
+  </nav>
+
+  <!-- Konten -->
+  <div class="container mt-4">
+    <div class="row g-3">
+      <!-- Sidebar Kiri -->
+      <div class="col-md-3 sidebar-custom">
+        <div class="btn-custom" onclick="tampilkanKonten('dashboard')">Dashboard</div>
+        <div class="btn-custom" onclick="tampilkanKonten('peta')">Peta</div>
+        <div class="btn-custom" onclick="tampilkanKonten('jenis-peta')">Contoh Peta</div>
+        <div class="btn-custom" onclick="tampilkanKonten('peta-map')">Peta Interaktif</div>
+        <div class="mt-4">
+          <p>KBK Terestris</p>
+          <p>KBK Sistem Informasi Geografis</p>
+          <p>KBK Fotogrametri</p>
+          <p>KBK Penginderaan Jauh</p>
+        </div>
+      </div>
+
+      <!-- Konten Tengah -->
+      <div class="col-md-6">
+        <div id="dashboard" class="content-box">
+          <h5>Sistem Informasi Geografis Berbasis Internet</h5>
+          <p>Salah satu mata kuliah yang termasuk dalam KBK Sistem Informasi Geografis (SIG) adalah SIG Berbasis Internet. 
+            Pada mata kuliah ini mahasiswa mempelajari pengaplikasian SIG dengan berbasis pada platform internet. 
+            Mahasiswa mempelajari konsep kerja internet, proses <i>request</i> dan <i>respond</i> oleh <i>user</i> dan <i>client</i>, serta pembangunan website itu sendiri.</p>  
+          <br>
+          <p>Memahami HTML dan CSS merupakan langkah selanjutnya bagi mahasiswa yang  
+            membuat halaman website. Kali ini, salah satu tugas adalah membangun tampilan 
+            halaman web sederhana ini. Selanjutnya halaman sederhana ini dikembangkan kembali dengan 
+            mengaplikasikan penggunaan Bootstrap.
+          </p>
+        </div>
+
+        <div id="peta" class="content-box hidden">
+          <h5>Peta</h5>
+          <p>Peta Digital Statis, yaitu peta digital yang dibuat dengan tujuan khusus dan memiliki parameter tertentu atau tidak dapat diubah secara sepihak</p>  
+          <p>Peta Digital Dinamis, yaitu peta digital yang dibuat dengan tujuan bebas atau tidak terikat dan bersifat berubah-ubah menyesuaikan tema dan waktu</p>  
+          <p>Peta Digital Interaktif, merupakan peta digital dinamis berkelanjutan yang memudahkan pengguna untuk berinteraksi dengan peta (mencari atau memfilter informasi)</p>
+        </div>
+
+        <div id="jenis-peta" class="content-box hidden">
+          <h5>Contoh Peta Statis dan Peta Dinamis</h5>
+          <p>Contoh dari peta statis adalah Peta Rupa Bumi Indonesia (RBI) yang berisi informsi tetap atau diperbarui dalam jangka waktu cukup panjang.
+            Berbeda dengan peta dinamis yang relatif dapat terus berubah, seperti peta jalur perdagangan global</p>
+
+          <!-- Teks di luar gambar -->
+          <div class="text-center fw-bold mb-2">Peta Rupa Bumi Digital Indonesia</div>
+
+          <div class="gambar-container">
+            <img src="https://store.avenza.com/cdn/shop/products/20211208040012_20211207_140055_715362_1607-631_preview_0_ada1a9fa-ee3e-4b5f-8859-da4ae309847a.jpg" alt="Ilustrasi Jenis Peta" style="width: 60%; height: 100%; object-fit: cover;" />
+          </div>
+        </div>
+
+        <div id="peta-map" class="content-box hidden">
+          <h5>Contoh Peta Interaktif</h5>
+          <p>Peta ini memungkinkan pengguna untuk berinteraksi dengan tampilan spasial berbasis web.</p>
+
+          <div id="map" style="height: 280px; width: 100%;" class="rounded shadow mb-3"></div>
+        
+          <!-- LEGENDA -->
+          <div class="mt-3">
+            <strong>Legenda:</strong>
+            <ul>
+              <li><span style="color: blue;">■</span> Asrama Putra</li>
+              <li><span style="color: rgb(195, 12, 198);">■</span> Asrama Putri</li>
+              <li><span style="color: rgb(132, 241, 43);">■</span> Bangunan Umum</li>
+            </ul>
+          </div>
+        
+          <!-- TOMBOL LOKASI -->
+          <button class="btn btn-danger mb-2" onclick="tampilkanMarker()">Lokasi Pesantren</button>
+        </div>
+
+        <div id="contact" class="content-box hidden">
+          <h5>Kontak Kami</h5>
+          <p>KAMPUS I
+            <br>Jl. Padjajaran No.104, Condongcatur, Sleman, Yogyakarta</p>
+          <p>KAMPUS II
+            <br>Jl. Babarsari 2, Tambak Bayan, Yogyakarta.</p>
+          </div>
+
+        <div id="email" class="content-box hidden">
+          <h5>Email Resmi</h5>
+          <p>teknikgeomatika@upnyk.ac.id</p>
+        </div>
+
+        <div id="sosmed" class="content-box hidden">
+          <h5>Media Sosial</h5>
+          <ul>
+            <li><a href="https://www.instagram.com/geomatikaupnvy/" target="_blank">Instagram</a></li>
+            <li><a href="https://geomatika.upnyk.ac.id/" target="_blank">Website</a></li>
+
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sidebar Kanan -->
+<div class="col-md-3 sidebar-custom d-flex flex-column align-items-center justify-content-center">
+  <div id="gambar-wrapper-kanan">
+    <div id="teks-gambar-kanan" class="teks-atas hidden">Peta Perdagangan Global</div>
+    <img id="gambar-kanan" src="" alt="Ilustrasi" style="display: none;" />
+  </div>
+  <div id="teks-kanan" class="hidden">
+    <p>Peta merupakan representasi permukaan bumi dalam bentuk digital atau konvensional yang dilengkapi dengan simbol-simbol yang menyampaikan informasi tertentu.</p>
+    <p>Peta konvensional merupakan peta yang dicetak dan dibuat secara manual (analog).</p>
+    <p>Peta digital merupakan peta yang dibuat menggunakan bantuan teknologi, misalnya perangkat lunak pada komputer</p>
+  </div>
+
+  <!-- Petunjuk Peta Interaktif -->
+  <div id="petunjuk-peta" class="hidden mt-3 w-100">
+    <div class="card p-3" style="font-size: 0.9rem;">
+      <h6 class="fw-bold text-success">Petunjuk</h6>
+      <ol class="ps-3">
+        <li>Gunakan tombol zoom in ➕, zoom out ➖, dan reset bearing to north 🧭 untuk mengatur posisi peta.</li>
+        <li>Titik biru bertuliskan huruf "A" merupakan titik lokasi Anda.</li>
+        <li>Klik tombol <span class="badge bg-danger">Lokasi Pesantren</span> untuk menampilkan lokasi Pondok Pesantren Al-Munawwir.</li>
+        <li>Klik salah satu bangunan sebagai tujuan destinasi.</li>
+        <li>Rute ditampilkan sebagai garis biru pada peta.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-4">
+    <p>Copyright @Nadya Adhi Naftama_117220066</p>
+  </footer>
+  
+  <!-- JavaScript -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
+  
+  <script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoibmFkeWF5YSIsImEiOiJjbTlneGZjMGwwM3Z4MmtvZXUwN3d2cGE3In0.FXiM6AzsR3x_L-W_H0RVkA'; // ← Ganti token di sini
+    
+  let dataAsramaPutra = null;
+  let dataAsramaPutri = null;
+  let dataBangunanUmum = null;
+  let map;
+
+function initMapbox() {
+    if (map) return; // Jangan inisialisasi dua kali
+
+    map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [110.414, -7.747],
+      zoom: 16
+    });
+
+    map.addControl(new mapboxgl.NavigationControl());
+
+    const directions = new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+      unit: 'metric',
+      profile: 'mapbox/driving'
+    });
+    map.addControl(directions, 'top-right');
+
+    map.on('load', () => {
+      tambahGeoJSON();
+    });
+  }
+
+  function tambahGeoJSON() {
+  // ASRAMA PUTRA
+  fetch('geojson/Asrama_Putra.geojson')
+    .then(res => res.json())
+    .then(data => {
+      dataAsramaPutra = data;
+      map.addSource('asramaPutra', { type: 'geojson', data: data });
+      map.addLayer({
+        id: 'asramaPutra-layer',
+        type: 'fill',
+        source: 'asramaPutra',
+        paint: {
+          'fill-color': '#0000ff',
+          'fill-opacity': 0.6
+        }
+      });
+    });
+
+  // ASRAMA PUTRI
+  fetch('geojson/Asrama_Putri.geojson')
+    .then(res => res.json())
+    .then(data => {
+      dataAsramaPutri = data;
+      map.addSource('asramaPutri', { type: 'geojson', data: data });
+      map.addLayer({
+        id: 'asramaPutri-layer',
+        type: 'fill',
+        source: 'asramaPutri',
+        paint: {
+          'fill-color': '#ff00ff',
+          'fill-opacity': 0.6
+        }
+      });
+    });
+
+  // BANGUNAN UMUM
+  fetch('geojson/Bangunan_Umum.geojson')
+    .then(res => res.json())
+    .then(data => {
+      dataBangunanUmum = data;
+      map.addSource('bangunanUmum', { type: 'geojson', data: data });
+      map.addLayer({
+        id: 'bangunanUmum-layer',
+        type: 'fill',
+        source: 'bangunanUmum',
+        paint: {
+          'fill-color': '#00ff00',
+          'fill-opacity': 0.6
+        }
+      });
+    });
+}
+
+const bounds = new mapboxgl.LngLatBounds();
+const semuaData = [dataAsramaPutra, dataAsramaPutri, dataBangunanUmum];
+
+semuaData.forEach(data => {
+  if (!data) return;
+  data.features.forEach(feature => {
+    const geometry = feature.geometry;
+    if (geometry.type === 'MultiPolygon') {
+      geometry.coordinates.forEach(polygon => {
+        polygon[0].forEach(coord => {
+          bounds.extend(coord);
+        });
+      });
+    } else if (geometry.type === 'Polygon') {
+      geometry.coordinates[0].forEach(coord => {
+        bounds.extend(coord);
+      });
+    }
+  });
+});
+
+if (!bounds.isEmpty()) {
+  map.fitBounds(bounds, { padding: 20 });
+}
+
+const lokasi = [
+  {
+    nama: 'Pondok Pesantren Al-Munawwir',
+    koordinat: [110.36128105908483,-7.826710641277089], // ← Ganti dengan koordinat sebenarnya jika perlu
+    warna: 'red'
+  }
+];
+// Tambahkan marker lokasi
+function tampilkanMarker() {
+  lokasi.forEach(item => {
+    const el = document.createElement('div');
+    el.style.backgroundColor = item.warna;
+    el.style.width = '20px';
+    el.style.height = '20px';
+    el.style.borderRadius = '50%';
+    el.style.border = '2px solid white';
+
+    new mapboxgl.Marker(el)
+      .setLngLat(item.koordinat)
+      .setPopup(new mapboxgl.Popup().setHTML(`<strong>${item.nama}</strong>`))
+      .addTo(map);
+
+    map.flyTo({ center: item.koordinat, zoom: 17 });
+  });
+}
+
+  // Fungsi tampilkan konten termasuk inisialisasi peta
+  function tampilkanKonten(id) {
+    const semuaKonten = document.querySelectorAll('.content-box');
+    semuaKonten.forEach(konten => konten.classList.add('hidden'));
+
+    const kontenAktif = document.getElementById(id);
+    if (kontenAktif) {
+      kontenAktif.classList.remove('hidden');
+    }
+
+    const gambarSidebar = document.getElementById('gambar-kanan');
+    const teksSidebar = document.getElementById('teks-kanan');
+    const teksGambarKanan = document.getElementById('teks-gambar-kanan');
+
+    if (id === 'peta') {
+      gambarSidebar.style.display = 'none';
+      teksSidebar.classList.remove('hidden');
+      teksGambarKanan.classList.add('hidden');
+    } else {
+      teksSidebar.classList.add('hidden');
+
+      if (id === 'contact' || id === 'sosmed' || id === 'email') {
+        gambarSidebar.src = 'https://four.upnyk.ac.id/public/assets/berita/gedung_upn_1_R.jpg';
+        gambarSidebar.alt = 'Gedung UPN Yogyakarta';
+        gambarSidebar.style.display = 'block';
+        teksGambarKanan.classList.add('hidden');
+      } else if (id === 'jenis-peta') {
+        gambarSidebar.src = 'https://www.researchgate.net/profile/Zenas-Paloma/publication/342448181/figure/fig3/AS:906330688745474@1593097483950/Major-Global-Trade-Routes.png';
+        gambarSidebar.alt = 'Peta Perdagangan Dunia';
+        gambarSidebar.style.display = 'block';
+        teksGambarKanan.textContent = 'Peta Jalur Perdagangan Global';
+        teksGambarKanan.classList.remove('hidden');
+      } else if (id === 'dashboard') {
+        gambarSidebar.src = 'https://statik.tempo.co/data/2011/09/07/id_89999/89999_620.jpg';
+        gambarSidebar.alt = 'Gambar Dashboard';
+        gambarSidebar.style.display = 'block';
+        teksGambarKanan.classList.add('hidden');
+      } else {
+        gambarSidebar.src = '';
+        gambarSidebar.style.display = 'none';
+        teksGambarKanan.classList.add('hidden');
+      }
+    }
+
+    const petunjukPeta = document.getElementById('petunjuk-peta');
+    if (id === 'peta-map') {
+      petunjukPeta.classList.remove('hidden');
+      initMapbox(); // ✅ Panggil inisialisasi peta
+    } else {
+      petunjukPeta.classList.add('hidden');
+    }
+  }
+    window.onload = () => tampilkanKonten('dashboard');
+  </script>
+  
+</body>
+</html>

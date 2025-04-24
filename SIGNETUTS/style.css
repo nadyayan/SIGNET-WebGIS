@@ -1,0 +1,136 @@
+body {
+  background-color: #ffffff;
+}
+
+.navbar-custom {
+  background-color: #ffbe00;
+  justify-content: center;
+  position: relative;
+}
+
+.navbar-brand-centered {
+  margin: 0 auto;
+  font-weight: bold;
+  color: black !important;
+  font-size: 1.5rem;
+}
+
+.top-right-nav {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.nav-box {
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.nav-box:hover {
+  background-color: #f1f1f1;
+}
+
+footer {
+  background-color: #ffbe00;
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+  color: black;
+}
+
+.sidebar-custom {
+  background-color: #e0e0e0;
+  padding: 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.btn-custom {
+  background-color: #ffbe00;
+  font-weight: bold;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  color: black;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-custom:hover {
+  background-color: #e0a800;
+  color: white;
+}
+
+.content-box {
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  text-align: justify;
+}
+
+.sidebar-custom img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.gambar-container {
+  position: relative;
+  text-align: center;
+}
+.gambar-container img {
+  width: 100%;
+}
+.gambar-container .teks-atas {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+
+  #map { height: 200px; width: 100%; }
+  .legend-box i { width: 12px; height: 12px; display: inline-block; margin-right: 6px; }
+
+    /* Panel Directions Mapbox */
+    .mapboxgl-ctrl-directions {
+      max-width: 50px !important;
+      font-size: 8px !important;
+    }
+  
+    /* Input box */
+    .mapboxgl-ctrl-directions input {
+      font-size: 8px !important;
+      padding: 2px 3px !important;
+    }
+  
+    /* Mode switch (Driving, Walking, etc) */
+    .mapboxgl-ctrl-directions .mapboxgl-ctrl-geocoder--input {
+      font-size: 8x !important;
+    }
+  
+    /* Tombol-tombol mode navigasi */
+    .mapboxgl-ctrl-directions .mapboxgl-ctrl-group button {
+      font-size: 8px !important;
+      padding: 2px 4px !important;
+    }
+
+.hidden {
+  display: none;
+}
